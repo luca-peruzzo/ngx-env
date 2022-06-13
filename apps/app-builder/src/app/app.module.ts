@@ -6,7 +6,13 @@ import { AppComponent } from './app.component';
 @NgModule({
   declarations: [AppComponent],
   imports: [BrowserModule, NgxEnvModule],
-  providers: [],
+  // providers: [
+  //   NgxEnvRuntime,
+  //   {
+  //     provide: NGX_ENV_RUNTIME,
+  //     useValue: ['./assets/config/environment.production.json'],
+  //   },
+  // ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

@@ -1,10 +1,11 @@
 {
-  "name": "@ngx-env/demo",
-  "version": "2.2.0",
+  "name": "@ngx-env/app-process",
+  "version": "2.3.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "prebuild": "ng run app-process:env:production",
     "test": "cross-env NODE_ENV=test NG_APP_BRANCH_NAME=main ng test --watch=false"
   },
   "dependencies": {
