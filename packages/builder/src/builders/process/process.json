@@ -1,7 +1,18 @@
 {
-  "$schema": "http://json-schema.org/draft-07/schema",
-  "title": "Process Builder Options.",
-  "description": "Browser target options",
+  "$schema": "http://json-schema.org/schema",
+  "$id": "ngx-env-ng-add",
+  "title": "Replace process.env expression in TS files",
   "type": "object",
-  "properties": {}
+  "properties": {
+    "files": {
+      "type": "array",
+      "description": "Process files.",
+      "default": ["src/environments/environment.prod.ts"]
+    },
+    "destination": {
+      "type": "string",
+      "description": "Overwrite files",
+      "default": true
+    }
+  }
 }

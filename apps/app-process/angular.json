@@ -89,17 +89,11 @@
             "scripts": []
           }
         },
-        "env": {
+        "ngx-env": {
           "builder": "@ngx-env/builder:process",
-          "configurations": {
-            "production": {
-              "files": ["src/environments/environment.prod.ts"]
-            },
-            "development": {
-              "files": ["src/environments/environment.ts"]
-            }
-          },
-          "defaultConfiguration": "production"
+          "options": {
+            "outputPath": "src/environments/ngx-env"
+          }
         }
       }
     }
