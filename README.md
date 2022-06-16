@@ -264,7 +264,7 @@ export const environment = {
 };
 ```
 
-`footer.component.ts`
+`some.service.ts`
 
 ```ts
 import { environment } from "src/environments/environment";
