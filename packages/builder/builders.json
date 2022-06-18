@@ -26,9 +26,9 @@
       "schema": "./dist/builders/schemas/server.json",
       "description": "Build server app extended with ngx-env config"
     },
-    "process": {
-      "implementation": "./dist/builders/process",
-      "schema": "./dist/builders/schemas/process.json",
+    "pre-build": {
+      "implementation": "./dist/builders/pre-build",
+      "schema": "./dist/builders/schemas/pre-build.json",
       "description": "Replace environment variables usage in files with ngx-env"
     }
   }

@@ -88,12 +88,6 @@
             "styles": ["src/styles.css"],
             "scripts": []
           }
-        },
-        "ngx-env": {
-          "builder": "@ngx-env/builder:process",
-          "options": {
-            "outputPath": "src/environments/ngx-env"
-          }
         }
       }
     }
