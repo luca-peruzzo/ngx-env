@@ -10,34 +10,16 @@ import {
   Tree,
   url,
 } from "@angular-devkit/schematics";
-import { getFileFromTree, WorkspaceProject } from "../../utils/file-utils";
+import { getFileFromTree } from "../../utils/file-utils";
+import { WorkspaceProject, writeBuilder } from "../../utils/workspace";
 
 interface NgAddOptions {
   project: string;
   preBuild: boolean;
+  ciOnly: boolean;
 }
 
-function writeBuilder(
-  project: WorkspaceProject,
-  target: string,
-  builder: string,
-  mandatory = false
-) {
-  if (!project?.architect?.[target]) {
-    if (mandatory) {
-      throw new SchematicsException(
-        `Cannot read the output path(architect.build.serve.builder) in angular.json`
-      );
-    }
-    return;
-  }
-  project.architect[target] = {
-    ...project.architect[target],
-    builder,
-  };
-}
-
-export function builder({ preBuild, project }: NgAddOptions): Rule {
+export function builder({ preBuild, ciOnly, project }: NgAddOptions): Rule {
   return (tree: Tree, _context: SchematicContext) => {
     const { path: workspacePath, content: workspace } = getFileFromTree(tree, [
       "/angular.json",
@@ -59,16 +41,39 @@ export function builder({ preBuild, project }: NgAddOptions): Rule {
     }
 
     if (preBuild) {
-      wsProject.architect["build"] = {
-        ...wsProject.architect["build"],
-        options: {
-          ...wsProject.architect["build"].options,
-          index: "src/__ngx-env__/index.html",
-        },
-        configurations: {
-          ...wsProject.architect["build"].configurations,
-          development: {
-            ...wsProject.architect["build"].configurations.development,
+      if (!ciOnly) {
+        wsProject.architect["build"] = {
+          ...wsProject.architect["build"],
+          options: {
+            ...wsProject.architect["build"].options,
+            index: "src/__ngx-env__/index.html",
+          },
+          configurations: {
+            ...wsProject.architect["build"].configurations,
+            development: {
+              ...wsProject.architect["build"].configurations.development,
+              fileReplacements: [
+                {
+                  replace: "src/environments/environment.ts",
+                  with: "src/__ngx-env__/environments/environment.ts",
+                },
+              ],
+            },
+            production: {
+              ...wsProject.architect["build"].configurations.production,
+              fileReplacements: [
+                {
+                  replace: "src/environments/environment.ts",
+                  with: "src/__ngx-env__/environments/environment.prod.ts",
+                },
+              ],
+            },
+          },
+        };
+        wsProject.architect["test"] = {
+          ...wsProject.architect["test"],
+          options: {
+            ...wsProject.architect["test"].options,
             fileReplacements: [
               {
                 replace: "src/environments/environment.ts",
@@ -76,33 +81,13 @@ export function builder({ preBuild, project }: NgAddOptions): Rule {
               },
             ],
           },
-          production: {
-            ...wsProject.architect["build"].configurations.production,
-            fileReplacements: [
-              {
-                replace: "src/environments/environment.ts",
-                with: "src/__ngx-env__/environments/environment.prod.ts",
-              },
-            ],
-          },
-        },
-      };
-      wsProject.architect["test"] = {
-        ...wsProject.architect["test"],
-        options: {
-          ...wsProject.architect["test"].options,
-          fileReplacements: [
-            {
-              replace: "src/environments/environment.ts",
-              with: "src/__ngx-env__/environments/environment.ts",
-            },
-          ],
-        },
-      };
+        };
+      }
       wsProject.architect["ngx-env"] = {
         builder: "@ngx-env/builder:pre-build",
         options: {
           files: ["src/environments/**.ts", "src/index.html"],
+          ["ciOnly"]: ciOnly ? undefined : false,
         },
       };
       const { path: packageJsonPath, content: packageJson } = getFileFromTree(
@@ -110,12 +95,16 @@ export function builder({ preBuild, project }: NgAddOptions): Rule {
         ["/package.json", "./package.json"]
       );
       packageJson["scripts"]["ngx-env"] = "ng run app-process:ngx-env";
-      ["prebuild", "prestart", "pretest"].forEach((script) => {
-        if (!packageJson["scripts"][script]) {
-          packageJson["scripts"][script] = packageJson[script] =
-            "npm run ngx-env";
-        }
-      });
+      if (!packageJson["scripts"]["prebuild"]) {
+        packageJson["scripts"]["prebuild"] = "npm run ngx-env";
+      }
+      if (!ciOnly) {
+        ["prestart", "pretest"].forEach((script) => {
+          if (!packageJson["scripts"][script]) {
+            packageJson["scripts"][script] = "npm run ngx-env";
+          }
+        });
+      }
       tree.overwrite(packageJsonPath, JSON.stringify(packageJson, null, 2));
       tree.overwrite(workspacePath, JSON.stringify(workspace, null, 2));
     } else {
@@ -124,6 +113,7 @@ export function builder({ preBuild, project }: NgAddOptions): Rule {
           `@ngx-env/builder requires an Angular project type of "application" in angular.json`
         );
       }
+
       writeBuilder(wsProject, "build", "@ngx-env/builder:browser", true);
       writeBuilder(wsProject, "serve", "@ngx-env/builder:dev-server", true);
       writeBuilder(wsProject, "test", "@ngx-env/builder:karma");

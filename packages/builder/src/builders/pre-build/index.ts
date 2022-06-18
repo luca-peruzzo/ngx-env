@@ -8,7 +8,7 @@ import { escapeStringRegexp, getClientEnvironment } from "../../utils/env";
 
 interface Options extends JsonObject {
   files: string[];
-  outputPath: string;
+  ciOnly: boolean;
 }
 
 const { raw } = getClientEnvironment(/^NG_APP/i);
@@ -73,9 +73,12 @@ async function processHtmlFiles(files: string[], outputPath: string) {
   });
 }
 
-async function processBuilder({ files }: Options): Promise<BuilderOutput> {
+async function processBuilder({
+  files,
+  ciOnly,
+}: Options): Promise<BuilderOutput> {
   try {
-    const outputPath = "src/__ngx-env__";
+    const outputPath = ciOnly ? "src" : "src/__ngx-env__";
     await processTsFiles(
       files.filter((file) => file.endsWith(".ts")),
       outputPath

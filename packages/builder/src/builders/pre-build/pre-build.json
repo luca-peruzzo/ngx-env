@@ -7,6 +7,11 @@
     "files": {
       "type": "array",
       "description": "Process files."
+    },
+    "ciOnly": {
+      "type": "boolean",
+      "description": "Overwrite source file. Run only on CI",
+      "default": true
     }
   }
 }

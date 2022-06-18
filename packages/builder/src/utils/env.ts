@@ -7,6 +7,20 @@ export function escapeStringRegexp(str: string) {
   return str.replace(/[|\\{}()[\]^$+*?.]/g, "\\$&").replace(/-/g, "\\x2d");
 }
 
+export function parseContent(
+  content: string,
+  environment: { [key: string]: any }
+) {
+  return Object.keys(environment).reduce(
+    (html, key) =>
+      html.replace(
+        new RegExp("%" + escapeStringRegexp(key) + "%", "g"),
+        environment[key]
+      ),
+    content
+  );
+}
+
 export function getClientEnvironment(prefix: RegExp) {
   const env = process.env.NG_APP_ENV || process.env.NODE_ENV;
   const dotenvBase = path.resolve(process.cwd(), ".env");

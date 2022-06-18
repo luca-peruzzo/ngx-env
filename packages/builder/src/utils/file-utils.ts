@@ -1,29 +1,5 @@
 import { SchematicsException, Tree } from "@angular-devkit/schematics";
-
-export type Options = Record<string, any>;
-export type Environment = "development" | "production";
-export interface WorkspaceProject {
-  projectType?: string;
-  architect?: Record<
-    string,
-    {
-      builder: string;
-      index?: string;
-      options?: Options;
-      configurations?: Record<Environment, Options>;
-      defaultConfiguration?: Environment;
-      fileReplacements?: {
-        replace: string;
-        with: string;
-      }[];
-    }
-  >;
-}
-
-export interface Workspace {
-  defaultProject?: string;
-  projects: Record<string, WorkspaceProject>;
-}
+import { Workspace } from "./workspace";
 
 export function getFileFromTree(
   host: Tree,

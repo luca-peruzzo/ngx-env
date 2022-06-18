@@ -15,6 +15,11 @@
       "type": "boolean",
       "description": "Replace files before build",
       "default": false
+    },
+    "ciOnly": {
+      "type": "boolean",
+      "description": "Overwrite source file. Run only on CI",
+      "default": true
     }
   },
   "required": ["project"]
