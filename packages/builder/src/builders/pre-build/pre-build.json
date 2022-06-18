@@ -7,11 +7,6 @@
     "files": {
       "type": "array",
       "description": "Process files."
-    },
-    "outputPath": {
-      "type": "string",
-      "description": "The full path for the new output directory, relative to the current workspace.\nBy default, writes output to a folder named __ngx-env__ in the current project.",
-      "default": "src/__ngx-env__"
     }
   }
 }
