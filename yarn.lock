@@ -185,7 +185,7 @@
     uuid "8.3.2"
     yargs "17.4.1"
 
-"@angular/common@~14.0.0":
+"@angular/common@14.0.0", "@angular/common@~14.0.0":
   version "14.0.0"
   resolved "https://registry.yarnpkg.com/@angular/common/-/common-14.0.0.tgz#65245a5386819449a6ccc35cdb3f7ebd61a1d753"
   integrity sha512-VYydSXelPlcAnWZs6SKkOxV+rNe8zOtHKLf9jBTYT5nP5P66+va4zITo1C9bs5tbK+mRssayf615+SIGEXyJFg==

@@ -5,10 +5,23 @@
     <base href="/" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/x-icon" href="favicon.ico" />
-    <title>%NG_APP_VERSION%</title>
+    <title>%NG_APP_ENV% - %NG_APP_VERSION%</title>
+    <style>
+      .spinner {
+        position: absolute;
+        height: 100px;
+        width: 100px;
+        top: 50%;
+        left: 50%;
+        margin-left: -50px;
+        margin-top: -50px;
+        background: url("/assets/spinner.gif");
+        background-repeat: no-repeat;
+        background-size: 100%;
+      }
+    </style>
   </head>
   <body>
-    <h1>%NG_APP_ENV%</h1>
-    <app-root></app-root>
+    <app-root> <div class="spinner"></div> </app-root>
   </body>
 </html>

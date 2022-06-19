@@ -3,5 +3,6 @@
  */
 
 export * from "./env.pipe";
-export * from "./core.service";
+export * from "./runtime/runtime.config";
+export * from "./runtime/runtime.service";
 export * from "./core.module";
