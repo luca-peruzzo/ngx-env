@@ -1,0 +1,23 @@
+{
+    "ngxEnv": {
+        "type": "object",
+        "properties": {
+            "prefix": {
+                "type": "string",
+                "description": "Regexp prefix of the environment variables to be replaced",
+                "default": "NG_APP"
+            },
+            "root": {
+                "type": "string",
+                "description": "Root directory of the project to find .env files",
+                "default": "."
+            },
+            "verbose": {
+                "type": "boolean",
+                "description": "Verbose mode, print .env files and variables",
+                "default": true
+            }
+        },
+        "additionalProperties": false
+    }
+}
